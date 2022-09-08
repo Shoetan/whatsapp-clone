@@ -1,9 +1,23 @@
-const SidebarComponent = () => {
+import { Avatar } from "@mui/material";
+import styled from "styled-components";
+
+const Sidebar = () => {
     return ( 
-        <div>
-            
-        </div>
+        <Container>
+            <Header>
+                <UserAvatar/>
+            </Header>
+        </Container>
      );
 }
  
-export default SidebarComponent;
+export default Sidebar;
+
+
+
+const Container = styled.div ``
+
+const Header = styled.div``
+
+const UserAvatar = styled(Avatar)`
+`
