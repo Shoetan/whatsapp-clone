@@ -1,11 +1,24 @@
 import { Button } from '@mui/material';
 import Head from 'next/head';
 import styled from 'styled-components'
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../firebase'
+import { Result } from 'postcss';
 
 
 const Login = () => {
 
 const signIn = () =>{
+
+    signInWithPopup( auth, provider)
+        .then((result) =>{
+
+            console.log(result)
+
+        })
+        .catch((error) =>{
+            alert(error.message);
+        })
 
 }
 
