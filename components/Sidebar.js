@@ -3,10 +3,19 @@ import styled from "styled-components";
 import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
+import * as EmailValidator from 'email-validator'
 
 const Sidebar = () => {
 
     const createChat = () =>{
+
+       const input = prompt('Enter Email')
+
+       if (!input) return null
+
+       if (EmailValidator.validate(input)){
+        // We need to add the chat into the DB 'Chats' collection
+       }
 
     }
 

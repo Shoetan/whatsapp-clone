@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import {initializeApp} from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 
@@ -13,7 +13,7 @@ const firebaseConfig = {
   };
 
 /* if the app is not already initialize a new one else use the existing app */
-const app = !firebase.app.length ? firebase.initializeApp(firebaseConfig) : firebase.app()
+const app = initializeApp(firebaseConfig)
 
 const dataBase = getFirestore(app)
 
