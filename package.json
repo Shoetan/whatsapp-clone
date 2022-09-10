@@ -20,6 +20,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.0.3",
+    "react-svg-spinner": "^1.0.4",
     "sass": "^1.54.8",
     "styled-components": "^5.3.5"
   },
