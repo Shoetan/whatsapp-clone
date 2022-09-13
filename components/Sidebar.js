@@ -4,6 +4,8 @@ import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import * as EmailValidator from 'email-validator'
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 const Sidebar = () => {
 
@@ -26,7 +28,7 @@ const Sidebar = () => {
     return ( 
         <Container>
             <Header>
-                <UserAvatar/>
+                <UserAvatar onClick={ ()=>{ auth.signOut()}}/>
                 <IconsContainer>
                     <IconButton>
                          <ChatIcon/>
