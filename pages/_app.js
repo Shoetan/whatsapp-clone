@@ -2,33 +2,42 @@ import { useAuthState} from 'react-firebase-hooks/auth'
 import Loading from '../components/Loading'
 import Login from '../components/Login'
 import { auth, dataBase } from '../firebase'
-import { collection, serverTimestamp, setDoc, addDoc } from 'firebase/firestore'
-
+import { serverTimestamp, setDoc,doc, collection } from 'firebase/firestore'
 import '../styles/styles.css'
 import { useEffect } from 'react'
+
+
+
 function MyApp({ Component, pageProps })
+
  {
-  const [user,loading] = useAuthState(auth)
 
-  const dbReference = collection(dataBase, 'users')
+  /* Auth change hook from react firebase hooks */
 
-  const data = {
-    //email: user.email,
-    lastSeen : serverTimestamp(),
-    //photoUrl: user.photoURL
-  }
+  const [user, loading] = useAuthState(auth)
+
+
+  //console.log(user.uid);
 
 
   useEffect(()=>{
 
-    addDoc(dbReference,data)
-    .then(()=>{
-      console.log('Successfully added the data to the database');
-    })
-    .catch(err=>{
-      console.log(err.message)
-    });
-  })
+    if (user){
+
+      setDoc(doc(dataBase,'users', user.uid),{
+        lastSeen: serverTimestamp(), 
+        email: user.email,
+        photoUrl: user.photoURL
+      },
+
+      {merge:true}
+      )
+
+    }
+
+ }
+ ,[user])
+ 
 
   if(loading) return <Loading/>
 

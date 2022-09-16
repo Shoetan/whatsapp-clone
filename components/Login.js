@@ -3,7 +3,6 @@ import Head from 'next/head';
 import styled from 'styled-components'
 import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../firebase'
-import { Result } from 'postcss';
 
 
 const Login = () => {
