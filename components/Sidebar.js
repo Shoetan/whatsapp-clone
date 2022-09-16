@@ -22,9 +22,6 @@ const Sidebar = () => {
     }
 
 
-
-
-
     return ( 
         <Container>
             <Header>
@@ -87,7 +84,9 @@ const Search = styled.div `
     display: flex;
     align-items: center;
     padding: 15px;
-    border-radius: 2px;
+    border-radius: 10px;
+    margin: 15px;
+    background-color: aliceblue;
 `
 
 const SearchInput = styled.input`
@@ -95,6 +94,8 @@ const SearchInput = styled.input`
     border: none;
     flex:1;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    background-color: aliceblue;
 `
 
 const SidebarButton = styled(Button)`
