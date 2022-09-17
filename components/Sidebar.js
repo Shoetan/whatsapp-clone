@@ -4,10 +4,34 @@ import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import * as EmailValidator from 'email-validator'
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
+import { auth, dataBase } from "../firebase";
+import { addDoc, collection, query, where } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollection } from "react-firebase-hooks/firestore";
+
+
 
 const Sidebar = () => {
+
+
+    /* Auth change hook from react-firebase-hooks. The hook returns an object with the details of the current logged in user */
+    const [user] = useAuthState(auth)
+
+
+    const dbRef = collection(dataBase, "chats")
+
+    /* Query the DB to return a reference from the DBref where the the users array contains the email from the logged in user (user.email) */
+
+    const userChatRef = query(dbRef , where("users", "array-contains" , user.email))
+
+
+    /* useCollection is a real time listener from the react-firebase-hooks. This hooks to the database and updates as changes occur to the database */
+
+    const [chatsSnapshot] = useCollection(userChatRef)
+
+
+
+      /* We need to add the chat into the DB 'Chats' collection */
 
     const createChat = () =>{
 
@@ -15,17 +39,35 @@ const Sidebar = () => {
 
        if (!input) return null
 
-       if (EmailValidator.validate(input)){
-        // We need to add the chat into the DB 'Chats' collection
+       if (EmailValidator.validate(input) && !ifChatExits(input) && input !== user.email)
+       {
+             /* Add the object users with an array containing the email of the current loggedin user and the email of the chat recipient */
+            addDoc(dbRef,
+            {
+                users: [user.email, input],
+            })
+            .then(()=>{
+                console.log('users addded succesfully to the DB')
+            })
+            .catch((err)=>{
+                console.log(err.message);
+            })
+      
        }
 
     }
 
+    /* Check if the chat already exists by mapping through the chatsSnapshot docs and for each chat assign the chat data which consists of the users array and in the users array find a user the is equal to the recipient email */
+
+    const ifChatExits = (recipientEmail)=>
+
+        !!chatsSnapshot?.docs.find((chat) => chat.data().users.find((user) => user === recipientEmail)?.length > 0)
+     
 
     return ( 
         <Container>
             <Header>
-                <UserAvatar onClick={ ()=>{ auth.signOut()}}/>
+                <UserAvatar onClick={ ()=> auth.signOut()}/>
                 <IconsContainer>
                     <IconButton>
                          <ChatIcon/>
