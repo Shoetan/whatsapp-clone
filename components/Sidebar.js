@@ -8,8 +8,76 @@ import { auth, dataBase } from "../firebase";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
+import ChatsSection from "../components/ChatsSection"
+import {Loading} from "../components/Loading"
+
+ 
+/* ---------------------STYLES-------------------- */
 
 
+const Container = styled.div `
+
+
+`
+
+const Header = styled.div`
+    display: flex;
+    position: sticky;
+    top:0;
+    background-color:white;
+    z-index: 1;
+    justify-content: space-between;
+    margin-top: 5px;
+    align-items:center;
+    padding:12px;
+    height:80px;
+    border-bottom: 1px solid whitesmoke;
+
+`
+
+const UserAvatar = styled(Avatar)`
+    cursor: pointer;
+    
+
+    :hover{
+        opacity:0.8;
+    }
+`
+
+const IconsContainer = styled.div``
+
+const Search = styled.div `
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px;
+    background-color: aliceblue;
+`
+
+const SearchInput = styled.input`
+    outline: none;
+    border: none;
+    flex:1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    background-color: aliceblue;
+`
+
+const SidebarButton = styled(Button)`
+    cursor: pointer ;
+    width: 100%;
+    color : black;
+    background-color: grey;
+
+    :hover{
+        background-color: blue;
+        opacity: 0.8;
+    }
+
+`
+
+/* ----------------------------JSX--------------------- */
 
 const Sidebar = () => {
 
@@ -85,7 +153,9 @@ const Sidebar = () => {
                 start a new chat
             </SidebarButton>
 
-            {/* List of chats */}
+            { chatsSnapshot ?. docs.map(chat =>(
+                <ChatsSection key = {chat.id} id = {chat.id} users = {chat.data().users} />
+            ))}
         </Container>
      );
 }
@@ -94,61 +164,3 @@ export default Sidebar;
 
 
 
-const Container = styled.div ``
-
-const Header = styled.div`
-    display: flex;
-    position: sticky;
-    top:0;
-    background-color:white;
-    z-index: 1;
-    justify-content: space-between;
-    margin-top: 5px;
-    align-items:center;
-    padding:12px;
-    height:80px;
-    border-bottom: 1px solid whitesmoke;
-
-`
-
-const UserAvatar = styled(Avatar)`
-    cursor: pointer;
-    
-
-    :hover{
-        opacity:0.8;
-    }
-`
-
-const IconsContainer = styled.div``
-
-const Search = styled.div `
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 15px;
-    background-color: aliceblue;
-`
-
-const SearchInput = styled.input`
-    outline: none;
-    border: none;
-    flex:1;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: medium;
-    background-color: aliceblue;
-`
-
-const SidebarButton = styled(Button)`
-    cursor: pointer ;
-    width: 100%;
-    color : black;
-    background-color: grey;
-
-    :hover{
-        background-color: grey;
-        opacity: 0.8;
-    }
-
-`
