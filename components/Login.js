@@ -7,19 +7,22 @@ import { auth, provider } from '../firebase'
 
 const Login = () => {
 
-const signIn = () =>{
 
-    signInWithPopup( auth, provider)
-        .then((result) =>{
+    /* Function to sign in user with the google provider in firebase */
 
-            console.log(result)
+    const signIn = () =>{
 
-        })
-        .catch((error) =>{
-            alert(error.message);
-        })
+        signInWithPopup( auth, provider)
+            .then((result) =>{
 
-}
+                console.log(result)
+
+            })
+            .catch((error) =>{
+                alert(error.message);
+            })
+
+    }
 
 
     return ( 

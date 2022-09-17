@@ -12,24 +12,23 @@ function MyApp({ Component, pageProps })
 
  {
 
-  /* Auth change hook from react firebase hooks */
+  /* Auth change hook from react firebase hooks that returns an object with the details of the current logged in user */
 
   const [user, loading] = useAuthState(auth)
 
 
-  //console.log(user.uid);
-
+  /* useEffect hooks runs everytime on page mount. Once there is a user or a current loggedin user the setDoc function adds the data the the firestore DB using the user google unique ID */
 
   useEffect(()=>{
 
     if (user){
 
       setDoc(doc(dataBase,'users', user.uid),{
-        lastSeen: serverTimestamp(), 
-        email: user.email,
+        email : user.email,
+        lastSeen: serverTimestamp(),
         photoUrl: user.photoURL
       },
-
+      /* This will stop any additional log in from overwriting the existing details of a logged in user */
       {merge:true}
       )
 
@@ -38,9 +37,10 @@ function MyApp({ Component, pageProps })
  }
  ,[user])
  
-
+   /* If the loading object from the useAuthState is on render a loading page */
   if(loading) return <Loading/>
 
+  /* if no user render the login page */
   if (!user) return <Login/>
 
   return <Component {...pageProps} />
