@@ -135,7 +135,11 @@ const Sidebar = () => {
     return ( 
         <Container>
             <Header>
-                <UserAvatar onClick={ ()=> auth.signOut()}/>
+                    {/* Check if the user object returned has a photoUrl or else use the first letter of the email address */}
+                {
+                    user.photoUrl ? (<UserAvatar src = { user.photoUrl}/>): ( <UserAvatar onClick={ ()=> auth.signOut()}>{user.email[0].toUpperCase()} </UserAvatar>)
+                }
+
                 <IconsContainer>
                     <IconButton>
                          <ChatIcon/>
