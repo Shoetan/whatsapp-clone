@@ -57,15 +57,15 @@ const ChatsSection = ({id , users}) => {
     const recipient = recipientSnapshot?.docs?.[0]?.data()
 
     /* directs to the chat window */
-    
+
     const goToChat =  () =>{
-        router(`/chat/${id}`)
+        router.push(`/chat/${id}`)
     }
 
     return ( 
         <Container onClick={goToChat}>
 
-        { recipient ? (<UserAvatar src = { recipient?. photoURL}/>) : ( <UserAvatar>{recipientEmail[0]}</UserAvatar>)}
+        { recipient ? (<UserAvatar src = { recipient?. photoURL}/>) : ( <UserAvatar>{recipientEmail[0].toUpperCase()}</UserAvatar>)}
            
             <p>{recipientEmail}</p>
         </Container>
