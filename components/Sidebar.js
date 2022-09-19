@@ -9,7 +9,7 @@ import { addDoc, collection, query, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import ChatsSection from "../components/ChatsSection"
-import {Loading} from "../components/Loading"
+
 
  
 /* ---------------------STYLES-------------------- */
@@ -88,7 +88,7 @@ const Sidebar = () => {
 
     const dbRef = collection(dataBase, "chats")
 
-    /* Query the DB to return a reference from the DBref where the the users array contains the email from the logged in user (user.email) */
+    /* Query the DB to return a reference from the DBref where the users array contains the email from the logged in user (user.email) */
 
     const userChatRef = query(dbRef , where("users", "array-contains" , user.email))
 
