@@ -67,7 +67,7 @@ const ChatsSection = ({id , users}) => {
 
         { recipient ? (<UserAvatar src = { recipient?. photoURL}/>) : ( <UserAvatar>{recipientEmail[0].toUpperCase()}</UserAvatar>)}
            
-            <p>{recipientEmail}</p>
+            <p style={{padding:'5px'}}>{recipientEmail}</p>
         </Container>
      );
 }

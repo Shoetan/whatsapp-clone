@@ -32,6 +32,8 @@ const ChatContainer = styled.div`
 `
 
 /* --------------------------------JSX----------------------------- */
+
+/* Props are chat and messages comes from the server side rendering  down below */
 const Chat = ({chat, messages}) => {
 
     const [user] = useAuthState(auth)
@@ -46,7 +48,6 @@ const Chat = ({chat, messages}) => {
             
             <Sidebar/>
             <ChatContainer>
-                <h1>This is the chats</h1>
                 <ChatScreen chat = {chat} messages = {messages}/>
             </ChatContainer>
         </Container>
