@@ -70,7 +70,7 @@ export async function getServerSideProps(context) {
     //Prepare message on the server
 
     /* The getDocs function from firebase gets all the document data from a collection. Below will go into the chats collection and get the messages array */
-    const messageReference = await getDocs(query(collection(chatRef, 'messages'), orderBy('timestamp', 'desc')))
+    const messageReference = await getDocs(query(collection(chatRef, 'messages'), orderBy('timestamp', 'asc')))
 
     const messages = messageReference.docs.map(doc => ({
         id : doc.id,

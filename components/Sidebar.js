@@ -111,7 +111,7 @@ const Sidebar = () => {
 
 
 
-      /* We need to add the chat into the DB 'Chats' collection */
+      /* This function creates a chat once the start chat button is clicked it takes an intended chat email and sends that to the chats database but before it does that it checks to see of that email exists already or it a genuine email address */
 
     const createChat = () =>{
 
@@ -149,7 +149,9 @@ const Sidebar = () => {
             <Header>
                     {/* Check if the user object returned has a photoUrl or else use the first letter of the email address */}
                 {
-                    user.photoUrl ? (<UserAvatar src = { user.photoUrl}/>): ( <UserAvatar onClick={ ()=> auth.signOut()}>{user.email[0].toUpperCase()} </UserAvatar>)
+                    user.photoURL ? 
+                     (<UserAvatar src = { user.photoURL}/>):
+                     ( <UserAvatar onClick={ ()=> auth.signOut()}>{user.email[0].toUpperCase()} </UserAvatar>)
                 }
 
                 <IconsContainer>
@@ -168,7 +170,8 @@ const Sidebar = () => {
             <SidebarButton onClick={createChat}>
                 start a new chat
             </SidebarButton>
-
+            
+            {/* Map through the chat snapshot and for every single chat in the chat snapshot return a set of props key,id and users */}
             { chatsSnapshot ?. docs.map(chat =>(
                 <ChatsSection key = {chat.id} id = {chat.id} users = {chat.data().users} />
             ))}
