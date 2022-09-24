@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, dataBase } from "../firebase"
@@ -12,6 +13,8 @@ import Message from "./Message";
 import { InsertEmoticon } from "@mui/icons-material";
 import MicIcon from '@mui/icons-material/Mic';
 import { useState } from "react";
+import TimeAgo from "timeago-react";
+import { useRef } from "react";
 
 /* -------------------------STYLES------------------------------------ */
 
@@ -36,7 +39,7 @@ const ChatInfo = styled.div`
     flex: 1;
     > h3 {
         margin-bottom: 5px;
-        color: gray;
+        color: black;
     }
     
     > p{
@@ -71,7 +74,7 @@ const InputContainer = styled.form`
 const Input = styled.input`
     flex: 1;
     padding: 20px;    
-    background-color: whitesmoke;
+    background-color: #e5ded8;
     border-radius: 10px;
     outline:0;
     border: none;
@@ -86,15 +89,28 @@ const Input = styled.input`
 const ChatScreen = ({chat, messages}) => {
 
     const [user] = useAuthState(auth)
+
     const router = useRouter()
+
     const recipientEmail = getRecipientEmail(chat.users, user)
+
     const userCollectionRef = collection(dataBase, "users")
+
     const chatCollectionRef = collection(dataBase, "chats")
 
     const [input, setInput] = useState('')
 
+    const endOfMessageRef = useRef(null)
+
     const [messagesSnapshot] = useCollection ( query(collection(doc(chatCollectionRef, router.query.id,), "messages"),orderBy("timestamp", "asc")))
 
+    const [recipientSnapshot] = useCollection(query(userCollectionRef), where('enail', '==', getRecipientEmail(chat.users,user)))
+
+    const recipient = recipientSnapshot?.docs?.[0]?.data()
+
+     
+
+    /* Below function will show the messages on the screen if the user is logged in else user the server  generated  content and it is a self evoking function */
 
    const showMessage = ()=>{
     if(messagesSnapshot){
@@ -110,14 +126,29 @@ const ChatScreen = ({chat, messages}) => {
             />
         ))
     }
+    else{
+
+        /* Get the message information from the server generated content */
+        return JSON.parse(messages).map(message =>(
+            <Message key = {message.id} user ={message.user} message = {message}   />
+        ))
+    }
+   }
+
+   /* Function to make the message snap to the bottom */
+   const scrollToBottom = () =>{
+        endOfMessageRef.current.scrollIntoView({
+            behavior : "smooth",
+            block : "start",
+        })
    }
    
 
-                    /* This function will do two things for
+                    /* This function called send message will do two things:
                     
-                            (i) Will updated the user collection with the current time of the logged in user
+                            (i) Will update the user collection with the current timestamp of the logged in user
                             
-                            (ii) Will go the chats collection and update the messages array based on the ID of the recipient user
+                            (ii) Will go the chats collection and update the messages array with a message object based on the ID of the recipient user
                     
                     */
    const sendMessage = (e) =>{
@@ -143,16 +174,32 @@ const ChatScreen = ({chat, messages}) => {
         )
 
         setInput('')
+        scrollToBottom()
 
    }
 
     return ( 
         <Container>
             <Header>
-                <UserAvatar/>
+
+            { recipient ? (<UserAvatar src = { recipient?. photoURL}/>) : ( <UserAvatar>{recipientEmail[0].toUpperCase()}</UserAvatar>)}
+
+                {/* <UserAvatar>{recipientEmail[0].toUpperCase()}</UserAvatar> */}
+
                 <ChatInfo>
-                    <h3>Rec Email</h3>
-                    <p>Last seen : </p>
+                    <h3>{recipientEmail}</h3>
+
+                    {/* Display the last seen of the user */}
+
+                    {recipientSnapshot ? (
+                    <p>Last active: {' '}
+                    {recipient?.lastSeen?.toDate() ? (
+                    <TimeAgo datetime={recipient?.lastSeen?.toDate()}/>
+                    ): "Unavailable"}
+                    </p>
+                ) : (
+                    <p>Loadind Last active...</p>
+                )}
                 </ChatInfo>
                 <HeaderIcons>
                     <IconButton>
@@ -164,8 +211,8 @@ const ChatScreen = ({chat, messages}) => {
                 </HeaderIcons>
             </Header>
             <MessageContainer>
-                    {/* {showMessage()} */}
-                    <EndOfMessage/>
+                    {showMessage()}
+                    <EndOfMessage  ref={endOfMessageRef}/>
             </MessageContainer>
 
                 <InputContainer>
@@ -173,8 +220,8 @@ const ChatScreen = ({chat, messages}) => {
                        <InsertEmoticon/>
                     </IconButton>
                     <Input value = {input} onChange = {e=>setInput(e.target.value)}   />
-                    <IconButton>
                     <button hidden disabled={!input} type='submit' onClick = {sendMessage}   >Send Message</button>
+                    <IconButton>
                        <MicIcon/>
                     </IconButton>   
                 </InputContainer>

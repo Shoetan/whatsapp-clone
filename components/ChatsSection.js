@@ -8,7 +8,7 @@ import { collection, query, where } from "firebase/firestore";
 import { useRouter } from "next/router";
 
 
-/* -----------------------------STYLES---------------------- */
+/* -----------------------------STYLES--------------------------------------- */
 
 const UserAvatar = styled(Avatar)`
     margin : 5px;
@@ -21,12 +21,13 @@ const Container = styled.div `
     cursor : pointer;
     padding: 5px;
     word-break : break-word;
+
     :hover{
         background-color: #e9eaeb;
     }
 `
 
-/* ----------------------JSX------------------- */
+/* ----------------------JSX--------------------------------------------------*/
 
 
 const ChatsSection = ({id , users}) => {
