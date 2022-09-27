@@ -9,6 +9,7 @@ import { addDoc, collection, query, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import ChatsSection from "../components/ChatsSection"
+import { signOut } from "firebase/auth";
 
 
  
@@ -150,8 +151,8 @@ const Sidebar = () => {
                     {/* Check if the user object returned has a photoUrl or else use the first letter of the email address */}
                 {
                     user.photoURL ? 
-                     (<UserAvatar src = { user.photoURL}/>):
-                     ( <UserAvatar onClick={ ()=> auth.signOut()}>{user.email[0].toUpperCase()} </UserAvatar>)
+                     (<UserAvatar src = { user.photoURL} onClick={() => signOut(auth)}   />):
+                     ( <UserAvatar onClick={ ()=> signOut(auth)}>{user.email[0].toUpperCase()} </UserAvatar>)
                 }
 
                 <IconsContainer>
